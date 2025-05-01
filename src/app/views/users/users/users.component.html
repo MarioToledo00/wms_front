@@ -1,0 +1,178 @@
+<div class="d-flex justify-content-between allign-items-center">
+  <div>
+    <h1>Usuarios</h1>
+    <p>Lista de usuarios</p>
+  </div>
+  <div class="align-content-center">
+
+    <button (click)="mostrarModal()"  color="primary" disabled="false" cButton>Agregar</button>
+  </div>
+</div>  
+
+<div class="table-overflow-x">
+    <table striped="true" cTable>
+      <thead>
+      <tr>
+          
+          <th scope="col">Nombre</th>
+          <th scope="col">Email</th>
+          <th scope="col">Telefono</th>
+          <th scope="col">Rol</th>
+          <th scope="col">Editar</th>
+      </tr>
+      </thead>
+      <tbody>
+          @for (record of usersList; track record.id) {
+              <tr>
+                  <td>{{record.name}}</td>
+                  <td>{{record.email}}</td>
+                  <td>{{record.tel}}</td>
+                  <td>{{record.rol}}</td>
+                  <td><button class="btn"style="color: white;"  color="primary" cButton (click)="mostrarModal(true,record.id)"><img src="assets/svg/pencil.svg" alt="pencil" ></button></td>
+              </tr>
+          }   
+      </tbody>
+    </table>
+    @if(Loading){
+          
+        <c-spinner style="align-self: center;" color="primary"></c-spinner>
+
+      
+    }
+
+    @if(!Loading && !usersList.length){
+      
+      <h3 style="align-self: center;">No hay datos para mostrar</h3>
+    
+    }
+</div>
+
+
+<c-modal alignment="center" [visible]="modalRegistro" backdrop="static">
+  <c-modal-header><b>{{TituloModal}}</b></c-modal-header>
+  <c-modal-body>
+    <form cForm [formGroup]="aplyForm" 
+            #customStylesForm="ngForm"
+                (ngSubmit)="onSubmitRegister()"
+                [validated]="customStylesValidated"
+                cForm
+                class="row g-3 needs-validation">
+              <p class="text-body-secondary">{{SubTituloModal}}</p>
+              <c-input-group class="mb-3">
+                <span cInputGroupText>
+                  <svg cIcon name="cilUser"></svg>
+                </span>
+                <input  autoComplete="name" cFormControl formControlName="name" placeholder="Nombre" required="" (blur)="validateName()"  [class.border-danger]="inValidName" />
+              </c-input-group>
+              <c-input-group class="mb-3" [hidden]="editUser.edit" >
+                <span cInputGroupText>&#64;</span>
+                <input  autoComplete="email" cFormControl  formControlName="email"  placeholder="Correo" required="" [class.border-danger]="inValidEmail"  (blur)="validateEmail()"/>
+              </c-input-group>
+              <c-input-group class="mb-3">
+                <span cInputGroupText>
+                  <svg cIcon name="cilPhone"></svg>
+                </span>
+                <input  autoComplete="tel" cFormControl formControlName="tel" placeholder="Telefono" required="" (blur)="validateTel()" [class.border-danger]="inValidTel" type="tel"  pattern="^\d{10}$" maxlength="10"/>
+              </c-input-group>
+              <c-input-group class="mb-3" [hidden]="editUser.edit">
+                <span cInputGroupText>
+                  <svg cIcon name="cilLockLocked"></svg>
+                </span>
+                <input  autoComplete="new-password" cFormControl formControlName="password" placeholder="Contraseña" type="password" required="" (blur)="validatePassword()" [class.border-danger]="inValidPassword"/>
+              </c-input-group>
+              <c-input-group class="mb-3" [hidden]="editUser.edit">
+                <span cInputGroupText>
+                  <svg cIcon name="cilLockLocked"></svg>
+                </span>
+                <input  autoComplete="new-password" cFormControl formControlName="password_confirm" placeholder="Repetir Contraseña" type="password" required="" (blur)="validatePasswordConfirm()" [class.border-danger]="inValidPasswordConfirm"/>
+                
+              </c-input-group>
+
+              <c-input-group class="mb-3">
+                <span cInputGroupText>
+                  <svg cIcon name="cilLockUnlocked"></svg>
+                </span>
+                <select formControlName="rol"  aria-label="Default select example"  cSelect [class.border-danger]="inValidRol"> 
+                  <option value="" disabled selected>Seleccione rol...</option>
+                  <option *ngFor="let rol of roles" [value]="rol.id" [style.cursor]="'pointer'">
+                    {{ rol.nombre }}
+                  </option>
+                </select>
+                
+              </c-input-group>
+              
+            </form>
+  </c-modal-body>
+  <c-modal-footer>
+    <div>
+      @if(editUser.edit){
+        <button color="light" class="btn color-danger"  type="submit" (click)="this.alertDelete=true;this.modalRegistro =false;" [disabled]="Loading">@if (Loading){<c-spinner aria-hidden="true" size="sm"></c-spinner>}Eliminar</button>
+      }
+    </div>
+    <div>
+      <button class="btn btn-secondary" (click)="cerrarModalRegistro()">Cancelar</button>
+      <button class="btn btn-success" style="color: white;"  type="submit" (click)="onSubmitRegister()" [disabled]="Loading">@if (Loading){<c-spinner aria-hidden="true" size="sm"></c-spinner>}Guardar</button>
+    </div>
+  </c-modal-footer>
+
+
+
+</c-modal>
+
+<c-modal [visible]="alertDelete" alignment="center"  backdrop="static" >
+  <c-modal-header><b>Confirmación</b></c-modal-header>
+  <c-modal-body>
+    ¿Estás seguro de que deseas eliminar este usuario?
+  </c-modal-body>
+  <c-modal-footer>
+    <div></div>
+    <div>
+      <button 
+      color="secondary"
+      cButton
+      variant="outline"class="btn btn-secondary" (click)="this.alertDelete=false;cerrarModalRegistro()" [disabled]="Loading">Cancelar</button>
+      <button class="btn btn-danger"style="color: white;" (click)="deleteUser()" [disabled]="Loading">@if (Loading){<c-spinner aria-hidden="true" size="sm"></c-spinner>}Eliminar</button>
+    </div>
+  </c-modal-footer>
+</c-modal>
+
+
+
+
+  
+<c-container class="floating-alert-container">
+  <c-alert [(visible)]="inValidEmail" dismissible color="danger" fade class="alert" >
+    <strong>Correo </strong> con formato incorrecto.
+  </c-alert>
+  <c-alert [(visible)]="inValidEmailCorreccion" dismissible color="danger" fade class="alert" >
+    <strong>Correo </strong> con formato incorrecto.
+  </c-alert>
+  <c-alert [(visible)]="inValidEmailAdmin" dismissible color="danger" fade class="alert">
+    <strong>Correo administrador</strong> con formato incorrecto.
+  </c-alert>
+  <c-alert [(visible)]="inValidName" dismissible color="danger" fade class="alert">
+    <strong>Nombre</strong> se encuentra vacio.
+  </c-alert>
+  <c-alert [(visible)]="inValidTel" dismissible color="danger" fade class="alert">
+    <strong>Telefono</strong> debe contener 10 caráteres.
+  </c-alert>
+  <c-alert [(visible)]="inValidPassword" dismissible color="danger" fade class="alert">
+    <strong>Contraseña</strong> (minimo 8 carácteres, una mayuscula y un carácter especial '!#%&').
+  </c-alert>
+  <c-alert [(visible)]="inValidPasswordConfirm" dismissible color="danger" fade class="alert">
+    <strong>Confirmación Contraseña</strong> no coincide.
+  </c-alert>
+  <c-alert [(visible)]="inValidRol" dismissible color="danger" fade class="alert">
+    <strong>Rol</strong> no seleccionado.
+  </c-alert>
+  <c-alert [(visible)]="inValidRequest" dismissible color="danger" fade class="alert">
+    <strong>Error: </strong> {{responseMessage}}.
+  </c-alert>
+  <c-alert [(visible)]="successRequest" dismissible color="success" fade class="alert">
+    <strong>Éxito</strong> {{responseMessage}}
+  </c-alert>
+  <c-alert [(visible)]="warningRequest" dismissible color="warning" fade class="alert">
+    <strong>Atención</strong> {{responseMessage}}
+</c-alert>
+  
+</c-container>

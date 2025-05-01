@@ -1,0 +1,52 @@
+<!--sidebar-->
+<c-sidebar
+  #sidebar1="cSidebar"
+  class="d-print-none sidebar sidebar-fixed border-end"
+  colorScheme="dark"
+  id="sidebar1"
+  visible
+>
+  <c-sidebar-header class="border-bottom">
+    <c-sidebar-brand [routerLink]="[]">
+      <img class="Logo" src="assets/images/logo_invertido_no_bg.png" alt="">
+    </c-sidebar-brand>
+  </c-sidebar-header>
+
+  <ng-scrollbar #scrollbar="ngScrollbar" (updated)="onScrollbarUpdate(scrollbar.state)" class="overflow" pointerEventsMethod="scrollbar" visibility="hover">
+    <c-sidebar-nav #overflow [navItems]="navItems" dropdownMode="close" compact />
+  </ng-scrollbar>
+  @if (!sidebar1.narrow) {
+    <c-sidebar-footer cSidebarToggle="sidebar1" class="border-top d-none d-lg-flex" toggle="unfoldable" style="cursor: pointer;">
+      <button cSidebarToggler aria-label="Toggle sidebar fold"></button>
+    </c-sidebar-footer>
+  }
+</c-sidebar>
+
+<!--main-->
+<div class="wrapper d-flex flex-column min-vh-100">
+  <!--app-header-->
+  <app-default-header
+    [cShadowOnScroll]="'sm'"
+    class="mb-4 d-print-none header header-sticky p-0 shadow-sm"
+    position="sticky"
+    sidebarId="sidebar1"
+  />
+  <!--app-body-->
+  <div class="body flex-grow-1">
+    <c-container breakpoint="lg" class="h-auto px-4">
+      <router-outlet />
+    </c-container>
+  </div>
+  <c-modal [visible]="showModal" alignment="center" (close)="cancelLogout()">
+    <c-modal-header>Confirmar Cerrar Sesión</c-modal-header>
+    <c-modal-body>
+      ¿Estás seguro de que deseas cerrar sesión?
+    </c-modal-body>
+    <c-modal-footer>
+      <button class="btn btn-secondary" (click)="cancelLogout()">Cancelar</button>
+      <button class="btn btn-danger" (click)="confirmLogout()">Cerrar sesión</button>
+    </c-modal-footer>
+  </c-modal>
+  <!--app footer-->
+  <app-default-footer />
+</div>

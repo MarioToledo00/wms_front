@@ -1,0 +1,34 @@
+.floating-alert {
+    max-width: 50%; /* Limita el ancho para evitar desbordes */
+    max-height: 58px;
+  }
+  
+  .floating-alert-container {
+    position: fixed;
+    top: 20px; /* Espaciado desde la parte superior */
+    right: 20px; /* Espaciado desde la parte derecha */
+    z-index: 1050; /* Asegúrate de que esté por encima de otros elementos */
+    display: flex;
+    flex-direction: column; /* Apila las alertas verticalmente */
+    gap: 10px; /* Espaciado entre alertas */
+    width: 25%;
+    min-width: 350px;
+  }
+  
+  .floating-alert-container c-alert {
+    /* Limita el ancho para evitar desbordes */
+    align-self: flex-end;
+  }
+
+
+  .danger{
+    color: red;
+  }
+
+  .boderDanger{
+    border-color: red;
+  }
+
+  .alert{
+    width: 100%;
+  }

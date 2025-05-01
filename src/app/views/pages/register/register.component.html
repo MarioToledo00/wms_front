@@ -1,0 +1,141 @@
+<div class="bg-light dark:bg-transparent min-vh-100 d-flex flex-row align-items-center">
+  <c-container>
+    <c-row class="justify-content-center">
+      <c-col lg="7" md="9" xl="6">
+        <c-card class="mx-4">
+          <c-card-body class="p-4">
+            
+            <form cForm [formGroup]="aplyForm" 
+            #customStylesForm="ngForm"
+                (ngSubmit)="onSubmitRegister()"
+                [validated]="customStylesValidated"
+                cForm
+                class="row g-3 needs-validation">
+              <h1>Registrate</h1>
+              <p class="text-body-secondary">Crea tu cuenta</p>
+              <c-input-group class="mb-3">
+                <span cInputGroupText>
+                  <svg cIcon name="cilUser"></svg>
+                </span>
+                <input [disabled]="Loading" autoComplete="name" cFormControl formControlName="name" placeholder="Nombre" required="" (blur)="validateName()"  [class.border-danger]="inValidName" />
+                <c-form-feedback [valid]="inValidName" class="danger">Ingrese un nombre</c-form-feedback>
+              </c-input-group>
+              <c-input-group class="mb-3">
+                <span cInputGroupText>&#64;</span>
+                <input [disabled]="Loading" autoComplete="email" cFormControl  formControlName="email"  placeholder="Correo" required="" [class.border-danger]="inValidEmail"  (blur)="validateEmail()"/>
+                <c-form-feedback [valid]="inValidEmail" class="danger">Ingrese un correo electronico valido</c-form-feedback>
+              </c-input-group>
+              <c-input-group class="mb-3">
+                <span cInputGroupText>
+                  <svg cIcon name="cilPhone"></svg>
+                </span>
+                <input [disabled]="Loading" autoComplete="tel" cFormControl formControlName="tel" placeholder="Telefono" required="" (blur)="validateTel()" [class.border-danger]="inValidTel" type="tel"  pattern="^\d{10}$" maxlength="10"/>
+                <c-form-feedback [valid]="inValidTel" class="danger">Ingrese un número valido</c-form-feedback>
+              </c-input-group>
+              <c-input-group class="mb-3">
+                <span cInputGroupText>
+                  <svg cIcon name="cilLockLocked"></svg>
+                </span>
+                <input [disabled]="Loading" autoComplete="new-password" cFormControl formControlName="password" placeholder="Contraseña" type="password" required="" (blur)="validatePassword()" [class.border-danger]="inValidPassword"/>
+                <c-form-feedback [valid]="inValidPassword" class="danger">Ingrese contraseña (minimo 8 caracteres, una mayuscula y un carácter especial)</c-form-feedback>
+              </c-input-group>
+              <c-input-group class="mb-3">
+                <span cInputGroupText>
+                  <svg cIcon name="cilLockLocked"></svg>
+                </span>
+                <input [disabled]="Loading" autoComplete="new-password" cFormControl formControlName="password_confirm"placeholder="Repetir Contraseña" type="password" required="" (blur)="validatePasswordConfirm()" [class.border-danger]="inValidPasswordConfirm"/>
+                <c-form-feedback [valid]="inValidPasswordConfirm" class="danger">Contraseña no coincide</c-form-feedback>
+              </c-input-group>
+              <c-input-group class="mb-4">
+                <span cInputGroupText >&#64;</span>
+                <input [disabled]="Loading" autoComplete="email" cFormControl formControlName="emailAdmin"  placeholder="Correo de administrador" required="" [class.border-danger]="inValidEmailAdmin"  (blur)="validateEmailAdmin()"/>
+                <span cInputGroupText cTooltip="El administrador es quien valida el registro de nuevos usuarios, si tiene alguna duda consulte a su jefe inmediato." >?</span>
+                <c-form-feedback [valid]="inValidEmailAdmin" class="danger">Ingrese un correo electronico valido</c-form-feedback>
+              </c-input-group>
+              
+              <div class="d-grid">
+                <button cButton color="success" style="color: white;" type="submit" [disabled]="Loading">@if (Loading){<c-spinner aria-hidden="true" size="sm"></c-spinner>} Aceptar</button>
+              </div>
+            </form>
+          </c-card-body>
+        </c-card>
+      </c-col>
+    </c-row>
+    <c-container class="floating-alert-container">
+      <c-alert [(visible)]="inValidEmail" dismissible color="danger" fade class="alert" >
+        <strong>Correo </strong> con formato incorrecto.
+      </c-alert>
+      <c-alert [(visible)]="inValidEmailCorreccion" dismissible color="danger" fade class="alert" >
+        <strong>Correo </strong> con formato incorrecto.
+      </c-alert>
+      
+      <c-alert [(visible)]="inValidEmailAdmin" dismissible color="danger" fade class="alert">
+        <strong>Correo administrador</strong> con formato incorrecto.
+      </c-alert>
+      <c-alert [(visible)]="inValidName" dismissible color="danger" fade class="alert">
+        <strong>Nombre</strong> se encuentra vacio.
+      </c-alert>
+      <c-alert [(visible)]="inValidTel" dismissible color="danger" fade class="alert">
+        <strong>Telefono</strong> debe contener 10 caráteres.
+      </c-alert>
+      <c-alert [(visible)]="inValidPassword" dismissible color="danger" fade class="alert">
+        <strong>Contraseña</strong> (minimo 8 carácteres, una mayuscula y un carácter especial '!#%&').
+      </c-alert>
+      <c-alert [(visible)]="inValidPasswordConfirm" dismissible color="danger" fade class="alert">
+        <strong>Confirmación Contraseña</strong> no coincide.
+      </c-alert>
+      <c-alert [(visible)]="inValidRequest" dismissible color="danger" fade class="alert">
+        <strong>Error: </strong> {{responseMessage}}.
+      </c-alert>
+      <c-alert [(visible)]="SolicitudUsuario" dismissible color="success" fade class="alert">
+        <strong>Éxito</strong> solicitud de usuario creada correctamente, espere la confirmación de su administrador.
+      </c-alert>
+      
+    </c-container>
+    
+  </c-container>
+
+  <c-modal [visible]="showModalConfirmacion"  (close)="cancelSolicitudUser()" backdrop="static">
+    <c-modal-header> <h2>Confirmación de correo</h2></c-modal-header>
+    <c-modal-body>
+      <h4>Se ha enviado un código de confirmación al correo que proporcionó anteriormente</h4>
+        <label for="">El código tiene un tiempo límite de 15 min.</label>
+      
+      <label for="">Si lo desea puede modificar el correo y reenviar el código</label>
+      
+      <form cForm [formGroup]="aplyForm" 
+            #customStylesForm="ngForm"
+                (ngSubmit)="onSubmitRegister()"
+                [validated]="customStylesValidated"
+                cForm
+                class="row g-3 needs-validation"
+                style="margin-top: 10px;"> 
+        <c-container style="display: inline-flex;">
+          <c-input-group class="mb-3">
+            <span cInputGroupText>&#64;</span>
+            <input [disabled]="Loading" autoComplete="email" cFormControl  formControlName="emailCorreccion"  placeholder="Correo" required="" [class.border-danger]="inValidEmailCorreccion"  (blur)="validateEmailCorrecion()"/>
+            <c-form-feedback [valid]="inValidEmailCorreccion" class="danger">Ingrese un correo electronico valido</c-form-feedback>
+          </c-input-group>
+          <button cButton color="success" style="color: white;margin-left: 10px;margin-bottom: 1rem !important;" type="submit" [disabled]="Loading">@if (Loading){<c-spinner aria-hidden="true" size="sm"></c-spinner>} Reenviar</button>
+        </c-container>
+        <c-container style="margin-top: 20px;">
+          <label for=""><b> Ingrese código:</b></label>
+        <c-container style="display: inline-flex;margin-top: 5px;">
+          
+          <c-input-group class="mb-3">
+            <span cInputGroupText>Código</span>
+            <input [disabled]="Loading" autoComplete="token1" cFormControl  formControlName="token1"  placeholder="" required="" />
+            <label for="" style="margin: 5px;">-</label>
+            <input [disabled]="Loading" autoComplete="token2" cFormControl  formControlName="token2"  placeholder="" required="" />
+          </c-input-group>
+          <button cButton color="success" style="color: white;margin-left: 10px;margin-bottom: 1rem !important;" type="submit" [disabled]="Loading" (click)="confirmarCodigo()">@if (Loading){<c-spinner aria-hidden="true" size="sm"></c-spinner>} Confirmar</button>
+        </c-container>
+      </c-container>
+      </form>
+    </c-modal-body>
+    <c-modal-footer style="display: flex;justify-content: space-between;">
+      <button class="btn btn-secondary" (click)="cancelSolicitudUser()">Cancelar</button>
+      <!-- <button class="btn btn-success" (click)="confirmarCodigo()">Aceptar</button> -->
+    </c-modal-footer>
+  </c-modal>
+</div>

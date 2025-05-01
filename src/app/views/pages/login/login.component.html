@@ -1,0 +1,75 @@
+@if (isLogged) {
+
+}@else {
+
+
+<div class="bg-light dark:bg-transparent min-vh-100 d-flex flex-row align-items-center">
+  <c-container breakpoint="md">
+    <c-row class="justify-content-center">
+      <c-col lg="10" xl="8">
+        <c-card-group>
+          <c-card class="p-4">
+            <c-card-body>
+              <form cForm [formGroup]="aplyForm" (submit)="onSubmitLogin()">
+                <img class="logo" src="assets/images/logo_blanco.png" alt="">
+                <p class="text-body-secondary">Ingresa a tu cuenta</p>
+                <c-input-group class="mb-3">
+                  <span cInputGroupText>
+                    <svg cIcon name="cilUser"></svg>
+                  </span>
+                  <input autoComplete="email" cFormControl formControlName="email" placeholder="Correo" />
+                </c-input-group>
+                <c-input-group class="mb-4">
+                  <span cInputGroupText>
+                    <svg cIcon name="cilLockLocked"></svg>
+                  </span>
+                  <input
+                    autoComplete="current-password"
+                    cFormControl
+                    placeholder="Contraseña"
+                    type="password"
+                    formControlName="password"
+                  />
+                </c-input-group>
+                <c-row>
+                  <c-col xs="12">
+                    <button cButton class="px-4" color="primary" type="submit" [disabled]="Loading">
+                      @if (Loading){<c-spinner aria-hidden="true" size="sm"></c-spinner>}
+                      Iniciar sesión
+                    </button>
+                  </c-col>
+                  <c-col class="text-right margin-t-10" xs="8">
+                    <button cButton class="px-0" color="link"  [disabled]="Loading">
+                      ¿Olvidaste tu contraseña?
+                    </button>
+                  </c-col>
+                </c-row>
+              </form>
+            </c-card-body>
+          </c-card>
+          <c-card [ngStyle]="{'minWidth.%': 44}" class="text-white bg-primary py-5">
+            <c-card-body class="text-center">
+              <div>
+                <h2>Regístrate</h2>
+                <p>
+                  Si aún no tienes una cuenta, te invitamos a crear una nueva registrándote ahora mismo. Haz clic en el enlace proporcionado y sigue los sencillos pasos para completar el proceso de registro. ¡No esperes más para disfrutar de todos los beneficios y funcionalidades que te están esperando!
+                </p>
+                <button [active]="true" (click)="doRegistro()" cButton class="mt-3" color="primary" routerLink="/register"  [disabled]="Loading">
+                  Registrarse ahora!
+                </button>
+              </div>
+            </c-card-body>
+          </c-card>
+        </c-card-group>
+      </c-col>
+    </c-row>
+  </c-container>
+  
+</div>
+<c-container class="floating-alert-container">
+  <c-alert [(visible)]="requestError" dismissible color="danger" fade class="alert">
+    <strong>Error: </strong> {{messageError}}.
+  </c-alert>
+</c-container>
+
+}
