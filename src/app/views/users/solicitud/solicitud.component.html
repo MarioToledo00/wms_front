@@ -1,0 +1,119 @@
+<div class="d-flex justify-content-between allign-items-center">
+    <div>
+      <h1>Solicitudes</h1>
+      <p>Lista de solicitudes para usuarios</p>
+    </div>
+    <div class="align-content-center">
+    </div>
+</div>  
+
+<div class="table-overflow-x">
+    <table striped="true" cTable>
+        <thead>
+        <tr>
+            
+            <th scope="col">Nombre</th>
+            <th scope="col">Email</th>
+            <th scope="col">Telefono</th>
+            <th scope="col">Rol</th>
+            <th scope="col">Acción</th>
+            
+        </tr>
+        </thead>
+        @if(!Loading){
+
+          <tbody>
+            
+              @for (record of data; track record.id) {
+                  <tr>
+                      <td>{{record.name}}</td>
+                      <td>{{record.email}}</td>
+                      <td>{{record.tel}}</td>
+                      <td>
+                        <select aria-label="Default select example"  (change)="onSelectChange($event, record.id)" cSelect> 
+                          <option value="" disabled selected>Seleccione...</option>
+                          <option *ngFor="let rol of roles" [value]="rol.id" [style.cursor]="'pointer'">
+                            {{ rol.nombre }}
+                          </option>
+                        </select>
+                      </td>
+                      <td>
+                          <c-dropdown>
+                              <button cButton cDropdownToggle color="primary">
+                                  Opciones
+                              </button>
+                              <ul cDropdownMenu>
+                                <li><a (click)="ModalAceptado(record.id)" cDropdownItem style="cursor: pointer;">Aceptar</a></li>
+                                <li><a (click)="ModalRechazo(record.id)" cDropdownItem style="cursor: pointer;">Rechazar</a></li>
+                              </ul>
+                            </c-dropdown>
+                      </td>
+                  </tr>
+              }   
+            
+          </tbody>
+        }
+      </table>
+      @if(Loading){
+        
+          <c-spinner style="align-self: center;"  color="primary"></c-spinner>
+
+        
+      }
+
+      @if(!Loading && !data.length){
+        
+        <h3 style="align-self: center;" >No hay datos para mostrar</h3>
+      
+      }
+      
+</div>
+
+<c-container class="floating-alert-container">
+    <c-alert [(visible)]="inValidRequest" dismissible color="danger" fade class="alert">
+        <strong>Error: </strong> {{inValidRequestMessage}}.
+    </c-alert>
+    <c-alert [(visible)]="UsuarioCreado" dismissible color="success" fade class="alert">
+        <strong>Éxito</strong> solicitud de usuario ha sido <strong>Aceptada</strong>.
+    </c-alert>
+    <c-alert [(visible)]="Usuariorechazado" dismissible color="warning" fade class="alert">
+        <strong>Atención</strong> solicitud de usuario ha sido <strong>Rechazada</strong>.
+    </c-alert>
+</c-container>
+
+
+<c-modal [visible]="showModalAceptado" alignment="center"  backdrop="static" (close)="cerrarModal()">
+    <c-modal-header><b>Confirmar creacion</b></c-modal-header>
+    <c-modal-body>
+      ¿Estás seguro de que deseas aceptar este nuevo usuario?
+    </c-modal-body>
+    <c-modal-footer>
+      <div></div>
+      <div>
+        <button color="secondary"
+        cButton
+        variant="outline"
+        class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn btn-success" style="color: white;" (click)="aceptarusuario()">Aceptar</button>
+      </div>
+    </c-modal-footer>
+  </c-modal>
+
+  <c-modal [visible]="showModalRechazo" alignment="center"  backdrop="static" (close)="cerrarModal()">
+    <c-modal-header><b>Confirmar rechazo</b></c-modal-header>
+    <c-modal-body>
+      ¿Estás seguro de que deseas rechazar esta solicitud?
+    </c-modal-body>
+    <c-modal-footer>
+      <div></div>
+      <div>
+        <button 
+        color="secondary"
+        cButton
+        variant="outline"class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn btn-danger"style="color: white;" (click)="rechazarusuario()"><img src="assets/svg/trash.svg" alt="Rechazar" >Rechazar</button>
+      </div>
+    </c-modal-footer>
+  </c-modal>
+
+
