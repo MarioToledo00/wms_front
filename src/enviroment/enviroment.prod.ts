@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    API_URL: 'imsnestjs-production.up.railway.app'
+    API_URL: 'https://api.example.com/'
   };
 
 
