@@ -52,14 +52,14 @@ export class AuthService {
     }
   }
 
-  async setRegister(name: string,email: string, tel: string, password: string,password_confirmation: string,emailAdmin: string){
+  async setRegister(name: string,email: string, tel: string, password: string,password_confirmation: string){
 
-    const response = await fetch(`${this.API_URL}/solicitud`,{
+    const response = await fetch(`${this.API_URL}/auth/request`,{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',  // Asegúrate de establecer el encabezado
       },
-      body: JSON.stringify({name,email,tel,password,password_confirmation,emailAdmin}),
+      body: JSON.stringify({name,email,tel,password,password_confirmation}),
     })
     const data = await response.json();
     if (data.success) {

@@ -40,7 +40,6 @@ export class RegisterComponent {
   tooltipValidated = false;
 
   inValidEmail = false;
-  inValidEmailAdmin = false;
   inValidEmailCorreccion =  false;
   inValidName = false;
   inValidPassword = false;
@@ -56,7 +55,6 @@ export class RegisterComponent {
       name: new FormControl(''),
       email: new FormControl(''),
       tel: new FormControl(''),
-      emailAdmin: new FormControl(''),
       emailCorreccion: new FormControl(''),
       password: new FormControl(''),
       password_confirm: new FormControl(''),
@@ -105,11 +103,7 @@ export class RegisterComponent {
       });
     }
   }
-  validateEmailAdmin(){
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    this.inValidEmailAdmin = !emailRegex.test(this.aplyForm.value.emailAdmin??'');
-    if(this.inValidEmailAdmin){ this.resetAlerts()}
-  }
+  
   validateEmailCorrecion(){
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     this.inValidEmailCorreccion = !emailRegex.test(this.aplyForm.value.emailCorreccion??'');
@@ -124,7 +118,6 @@ export class RegisterComponent {
     setTimeout(() => {
         
       this.inValidEmail = false;
-      this.inValidEmailAdmin = false;
       this.inValidName = false;
       this.inValidPassword = false;
       this.inValidPasswordConfirm = false;
@@ -135,8 +128,7 @@ export class RegisterComponent {
 
   async onSubmitRegister() {
 
-      this.validateEmail();
-      this.validateEmailAdmin();      
+      this.validateEmail();      
       this.validateName();
       this.validateTel();
       this.validatePassword();
@@ -147,7 +139,7 @@ export class RegisterComponent {
     
     this.customStylesValidated = false;
 
-    if(this.inValidEmail||this.inValidEmailAdmin||this.inValidName||this.inValidPassword||this.inValidPasswordConfirm||this.inValidTel||this.inValidEmailCorreccion)return;
+    if(this.inValidEmail||this.inValidName||this.inValidPassword||this.inValidPasswordConfirm||this.inValidTel||this.inValidEmailCorreccion)return;
     
     this.Loading=true;
     this.aplyForm.disable();
@@ -156,8 +148,7 @@ export class RegisterComponent {
       this.aplyForm.value.email ?? '',
       this.aplyForm.value.tel ?? '',
       this.aplyForm.value.password ?? '',
-      this.aplyForm.value.password_confirm ?? '',
-      this.aplyForm.value.emailAdmin ?? ''
+      this.aplyForm.value.password_confirm ?? ''
     );
     
     if(!response.success || response.success==false){
