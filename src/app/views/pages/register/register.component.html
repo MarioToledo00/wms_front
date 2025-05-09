@@ -46,15 +46,9 @@
                 <input [disabled]="Loading" autoComplete="new-password" cFormControl formControlName="password_confirm"placeholder="Repetir Contraseña" type="password" required="" (blur)="validatePasswordConfirm()" [class.border-danger]="inValidPasswordConfirm"/>
                 <c-form-feedback [valid]="inValidPasswordConfirm" class="danger">Contraseña no coincide</c-form-feedback>
               </c-input-group>
-              <c-input-group class="mb-4">
-                <span cInputGroupText >&#64;</span>
-                <input [disabled]="Loading" autoComplete="email" cFormControl formControlName="emailAdmin"  placeholder="Correo de administrador" required="" [class.border-danger]="inValidEmailAdmin"  (blur)="validateEmailAdmin()"/>
-                <span cInputGroupText cTooltip="El administrador es quien valida el registro de nuevos usuarios, si tiene alguna duda consulte a su jefe inmediato." >?</span>
-                <c-form-feedback [valid]="inValidEmailAdmin" class="danger">Ingrese un correo electronico valido</c-form-feedback>
-              </c-input-group>
               
               <div class="d-grid">
-                <button cButton color="success" style="color: white;" type="submit" [disabled]="Loading">@if (Loading){<c-spinner aria-hidden="true" size="sm"></c-spinner>} Aceptar</button>
+                <button cButton color="success" style="color: white;" type="submit" [disabled]="Loading">@if (Loading){<c-spinner aria-hidden="true" size="sm"></c-spinner>} Aceptar </button>
               </div>
             </form>
           </c-card-body>
@@ -67,10 +61,6 @@
       </c-alert>
       <c-alert [(visible)]="inValidEmailCorreccion" dismissible color="danger" fade class="alert" >
         <strong>Correo </strong> con formato incorrecto.
-      </c-alert>
-      
-      <c-alert [(visible)]="inValidEmailAdmin" dismissible color="danger" fade class="alert">
-        <strong>Correo administrador</strong> con formato incorrecto.
       </c-alert>
       <c-alert [(visible)]="inValidName" dismissible color="danger" fade class="alert">
         <strong>Nombre</strong> se encuentra vacio.
