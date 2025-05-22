@@ -4,5 +4,5 @@ export interface UserInterface {
     email: string;
     tel: string;
     isRoot: boolean;
-    rol: number;
+    rol: number
 }

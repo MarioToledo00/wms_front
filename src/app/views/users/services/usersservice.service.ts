@@ -17,10 +17,10 @@ export class UsersserviceService {
   RolesData :Rol[] = []
 
   async getAllUsersList(): Promise <UserInterface[]> {
-    const data = await fetch(`${this.API_URL}/users`,{
+    const data = await fetch(`${this.API_URL}/users/getAllUsers`,{
           method: 'GET',
           headers: {
-              'Authorization': `Bearer ${this.AuthService.getToken()}`,
+              'Authorization': `Bearer ${this.AuthService.getToken().access}`,
               'Content-Type': 'application/json'
           }
       })
@@ -32,7 +32,7 @@ export class UsersserviceService {
     const data = await fetch(`${this.API_URL}/user/${id}`,{
       method: 'GET',
       headers: {
-          'Authorization': `Bearer ${this.AuthService.getToken()}`,
+          'Authorization': `Bearer ${this.AuthService.getToken().access}`,
           'Content-Type': 'application/json'
       }
   })
@@ -40,24 +40,24 @@ export class UsersserviceService {
   }
 
   async getSolUsersList() : Promise <UserInterface[]>{
-    const data = await fetch(`${this.API_URL}/solicituduser`,{
+    const data = await fetch(`${this.API_URL}/users/getRequests`,{
       method: 'GET',
       headers: {
-          'Authorization': `Bearer ${this.AuthService.getToken()}`,
+          'Authorization': `Bearer ${this.AuthService.getToken().access}`,
           'Content-Type': 'application/json'
       }
   })
     return data.json() ?? {}
   }
 
-  async aceptarSolUsuario(solicitud: number, rol:number): Promise <SolicitudResponse>{
-    const data = await fetch(`${this.API_URL}/users`,{
+  async aceptarSolUsuario(request_id: number, rol_id:number): Promise <SolicitudResponse>{
+    const data = await fetch(`${this.API_URL}/users/create`,{
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${this.AuthService.getToken()}`,
+            'Authorization': `Bearer ${this.AuthService.getToken().access}`,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ solicitud,rol })
+        body: JSON.stringify({ request_id,rol_id })
     })
     return data.json() ?? {};
 
@@ -67,7 +67,7 @@ export class UsersserviceService {
     const data = await fetch(`${this.API_URL}/solicituduser/${solicitud}`,{
         method: 'DELETE',
         headers: {
-            'Authorization': `Bearer ${this.AuthService.getToken()}`,
+            'Authorization': `Bearer ${this.AuthService.getToken().access}`,
             'Content-Type': 'application/json'
         },
     })
@@ -75,13 +75,12 @@ export class UsersserviceService {
   }
 
   async getRolesUsuarios():Promise <Rol[] | undefined>{
-    const data = await fetch(`${this.API_URL}/roles`,{
+    const data = await fetch(`${this.API_URL}/users/getRoles`,{
       method: 'GET',
       headers: {
-          'Authorization': `Bearer ${this.AuthService.getToken()}`,
+          'Authorization': `Bearer ${this.AuthService.getToken().access}`,
           'Content-Type': 'application/json'
       },
-     // body: JSON.stringify({ solicitud })
     })
     this.RolesData= await data.json()
     return this.RolesData ?? {};
@@ -92,7 +91,7 @@ export class UsersserviceService {
     const response = await fetch(`${this.API_URL}/users/create`,{
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.AuthService.getToken()}`,
+        'Authorization': `Bearer ${this.AuthService.getToken().access}`,
         'Content-Type': 'application/json',  // Asegúrate de establecer el encabezado
       },
       body: JSON.stringify({name,email,password,tel,rol_id,activated_by,user_admin}),
@@ -105,7 +104,7 @@ export class UsersserviceService {
     const response = await fetch(`${this.API_URL}/users/edit`,{
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.AuthService.getToken()}`,
+        'Authorization': `Bearer ${this.AuthService.getToken().access}`,
         'Content-Type': 'application/json',  // Asegúrate de establecer el encabezado
       },
       body: JSON.stringify({email,name,tel,rol_id}),
@@ -117,7 +116,7 @@ export class UsersserviceService {
     const response = await fetch(`${this.API_URL}/users/delete`,{
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.AuthService.getToken()}`,
+        'Authorization': `Bearer ${this.AuthService.getToken().access}`,
         'Content-Type': 'application/json',  // Asegúrate de establecer el encabezado
       },
       body: JSON.stringify({id}),

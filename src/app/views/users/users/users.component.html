@@ -27,7 +27,7 @@
                   <td>{{record.name}}</td>
                   <td>{{record.email}}</td>
                   <td>{{record.tel}}</td>
-                  <td>{{record.rol}}</td>
+                  <td>{{getNameRol(record.rol)}}</td>
                   <td><button class="btn"style="color: white;"  color="primary" cButton (click)="mostrarModal(true,record.id)"><img src="assets/svg/pencil.svg" alt="pencil" ></button></td>
               </tr>
           }   
@@ -95,7 +95,7 @@
                 <select formControlName="rol"  aria-label="Default select example"  cSelect [class.border-danger]="inValidRol"> 
                   <option value="" disabled selected>Seleccione rol...</option>
                   <option *ngFor="let rol of roles" [value]="rol.id" [style.cursor]="'pointer'">
-                    {{ rol.nombre }}
+                    {{ rol.name }}
                   </option>
                 </select>
                 

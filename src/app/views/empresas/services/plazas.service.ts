@@ -16,7 +16,7 @@ export class PlazasService {
         const data = await fetch(`${this.API_URL}/plazas`,{
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${this.AuthService.getToken()}`,
+                'Authorization': `Bearer ${this.AuthService.getToken().access}`,
                 'Content-Type': 'application/json'
             }
         })
@@ -32,7 +32,7 @@ export class PlazasService {
         const response = await fetch(`${this.API_URL}/${url}`,{
             method: 'POST',
             headers: {
-            'Authorization': `Bearer ${this.AuthService.getToken()}`,
+            'Authorization': `Bearer ${this.AuthService.getToken().access}`,
             'Content-Type': 'application/json',  // Asegúrate de establecer el encabezado
             },
             body: JSON.stringify({nombre,empresa_id,plaza_id}),
@@ -46,7 +46,7 @@ export class PlazasService {
         const response = await fetch(`${this.API_URL}/plazas/delete`,{
             method: 'POST',
             headers: {
-              'Authorization': `Bearer ${this.AuthService.getToken()}`,
+              'Authorization': `Bearer ${this.AuthService.getToken().access}`,
               'Content-Type': 'application/json',  // Asegúrate de establecer el encabezado
             },
             body: JSON.stringify({id}),

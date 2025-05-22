@@ -67,6 +67,7 @@ export class SolicitudComponent {
         this.data = response;
         this.roles = roles;
       }
+     
     }
 
     onSelectChange(event: Event, solicitud_id:number): void {
@@ -117,6 +118,8 @@ export class SolicitudComponent {
     async aceptarusuario(): Promise<SolicitudResponse | undefined>{
 
       const solicitud = this.data.find(sol => sol.id == this.solicitudId);
+
+      console.log('solicitud',solicitud);
 
       if(!solicitud){
         this.inValidRequestMessage = 'No se encontró solicitud'

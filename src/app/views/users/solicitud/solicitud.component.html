@@ -33,7 +33,7 @@
                         <select aria-label="Default select example"  (change)="onSelectChange($event, record.id)" cSelect> 
                           <option value="" disabled selected>Seleccione...</option>
                           <option *ngFor="let rol of roles" [value]="rol.id" [style.cursor]="'pointer'">
-                            {{ rol.nombre }}
+                            {{ rol.name }}
                           </option>
                         </select>
                       </td>

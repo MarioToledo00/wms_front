@@ -31,7 +31,7 @@ import { DocsExampleComponent }from  '../../../../components/docs-example/docs-e
     selector: 'app-register',
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss'],
-    imports: [ContainerComponent,ModalBodyComponent,ModalComponent,ModalFooterComponent,ModalHeaderComponent,SpinnerComponent,AlertComponent, RowComponent,ReactiveFormsModule,TooltipDirective,FormFeedbackComponent,FormsModule, ColComponent, TextColorDirective, CardComponent, CardBodyComponent, FormDirective, InputGroupComponent, InputGroupTextDirective, IconDirective, FormControlDirective, ButtonDirective,RowComponent, ColComponent, TextColorDirective, CardComponent, CardBodyComponent, ReactiveFormsModule, FormDirective, FormControlDirective, InputGroupComponent, InputGroupTextDirective, ButtonDirective]
+    imports: [ContainerComponent,ModalBodyComponent,ModalComponent,ModalFooterComponent,ModalHeaderComponent,SpinnerComponent,AlertComponent, RowComponent,ReactiveFormsModule,FormFeedbackComponent,FormsModule, ColComponent, TextColorDirective, CardComponent, CardBodyComponent, FormDirective, InputGroupComponent, InputGroupTextDirective, IconDirective, FormControlDirective, ButtonDirective,RowComponent, ColComponent, TextColorDirective, CardComponent, CardBodyComponent, ReactiveFormsModule, FormDirective, FormControlDirective, InputGroupComponent, InputGroupTextDirective, ButtonDirective]
 })
 export class RegisterComponent {
 
@@ -118,10 +118,13 @@ export class RegisterComponent {
     setTimeout(() => {
         
       this.inValidEmail = false;
+      this.inValidEmailCorreccion =  false;
       this.inValidName = false;
       this.inValidPassword = false;
       this.inValidPasswordConfirm = false;
       this.inValidTel = false;
+      this.inValidRequest = false;
+      this.SolicitudUsuario = false;
       
     }, 5000);
   }
@@ -167,11 +170,18 @@ export class RegisterComponent {
 
     }
 
+    this.resetAlerts()
+
     
   }
 
   cancelSolicitudUser(): void {
+
     this.showModalConfirmacion = false; // Actualiza el estado según el evento
+    this.aplyForm.patchValue({
+      token1: '', // Cambiar el valor del campo
+      token2: '', // Cambiar el valor del campo
+    });
   }
 
   async confirmarCodigo(){
@@ -198,6 +208,9 @@ export class RegisterComponent {
       this.aplyForm.enable();
       this.Loading = false;
     }
+
+    this.resetAlerts()
+
 
   }
 
