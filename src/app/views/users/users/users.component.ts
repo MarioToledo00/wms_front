@@ -126,7 +126,7 @@ export class UsersComponent {
     if(this.editUser && usuario){
       this.TituloModal='Editar usuario';
       this.SubTituloModal='Editar cuenta';
-      const rol = this.roles.find(rol => rol.nombre === usuario.rol.toString());
+      const rol = this.roles.find(rol => rol.name === usuario.rol.toString());
       if(rol){
         this.aplyForm.patchValue({
           name:usuario.name,
@@ -138,6 +138,15 @@ export class UsersComponent {
     }
 
     this.modalRegistro = true;
+  }
+
+  getNameRol(id: number):string {
+    const rol = this.roles.find(rol => rol.id === id);
+    if (!rol) {
+      return 'Sin Rol'
+    }
+      return rol.name.toString();
+    
   }
 
   async getAllUsersList(): Promise <UserInterface[] | undefined> {

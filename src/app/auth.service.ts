@@ -24,32 +24,25 @@ export class AuthService {
   }
 
   async setLoggin(email: string, password: string) {
-    // const response = await fetch(`${this.API_URL}/auth/login`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify({ email, password })
-    // });
-    // const data = await response.json();
-    // if (data.success) {
-    //   this.saveToken( data.user.access_token)
-    //   this.user = data.user.email;
-    //   this.token = data.user.access_token;
-    //   this.setAuth(true);
-      
-    //   return data;
-    // } else {
-    //   return data;
-    // }
-    this.saveToken( 'token')
-      this.user = 'email';
-      this.token = 'token';
+    const response = await fetch(`${this.API_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email , password })
+    });
+    const data = await response.json();
+    if (data.access) {
+      this.saveToken( data.access, data.refresh)
+      this.user = data.user.name;
+      this.token = data.access;
       this.setAuth(true);
-    return {
-      success :true,
-      message : 'Login'
-    }
+      this.router.navigate(['/dashboard']); // Redirige a la página de inicio después de iniciar sesión
+    } 
+
+    return data;
+    
+  
   }
 
   async setRegister(name: string,email: string, tel: string, password: string,password_confirmation: string){
@@ -70,7 +63,7 @@ export class AuthService {
   }
 
   async logout(){
-    localStorage.removeItem('access_token'); 
+    localStorage.removeItem('authToken'); 
       this.user = '';
       this.token = '';
       this.setAuth(false);
@@ -80,31 +73,49 @@ export class AuthService {
 
 
   async checkAuth():Promise<void> {
-    const response = await fetch(`${this.API_URL}/checkAuth`,{
-      method: 'GET'
+   
+    if(!this.getToken()){
+      this.setAuth(false); 
+      return
+    }
+    const response = await fetch(`${this.API_URL}/auth/checkAuth`,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',  // Asegúrate de establecer el encabezado
+      },
+      body: JSON.stringify({token: this.getToken().access}),
     });
 
     const data = await response.json();
 
-    if(data.success){
+    if(data.detail){
+      this.setAuth(false); 
+      return
+    }else{
       this.setAuth(true);
+      this.saveToken(this.getToken()!.access!,this.getToken()!.refresh!);
       this.router.navigate(['/dashboard']); 
+      
     }
 
   }
 
-  saveToken(token: string): void {
-    localStorage.setItem('authToken', token); // Guardar el token en local storage
+  saveToken(access: string, refresh:string): void {
+    localStorage.setItem('authToken', access); // Guardar el token en local storage
+    localStorage.setItem('refreshToken', refresh); // Guardar el token en local storage
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('authToken'); // Recuperar el token
+  getToken(): any | null {
+    return {
+      'access':localStorage.getItem('authToken'),// Recuperar el token
+      'refresh':localStorage.getItem('refreshToken'),// Recuperar el token
+    }
   }
 
 
   async setCodigo(email:string,token1:string,token2:string){
     const token = token1+token2;
-    const response = await fetch(`${this.API_URL}/solicitud/confirmarCorreo`,{
+    const response = await fetch(`${this.API_URL}/auth/verify`,{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',  // Asegúrate de establecer el encabezado

@@ -5,6 +5,7 @@ import { ContainerComponent, RowComponent, ColComponent, CardGroupComponent, Ale
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../auth.service'; // Ruta del servicio
 import { Router } from '@angular/router'; // Importa Router
+import { set } from 'lodash-es';
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -27,6 +28,13 @@ export class LoginComponent {
 
 
   async onSubmitLogin() {
+
+    if (this.aplyForm.value.email === '' || this.aplyForm.value.password === '') {
+      this.messageError = 'Por favor, completa todos los campos.';
+      this.requestError = true;
+      this.resetAlerts()
+      return;
+    }
     this.Loading= true;
     this.aplyForm.disable();
     const response = await this.AuthService.setLoggin(
@@ -35,18 +43,16 @@ export class LoginComponent {
     );
 
     
-    if (response.success) {
+    if (response.access) {
       this.router.navigate(['/dashboard']); 
     } else {
-      this.messageError=response.message;
+      this.messageError=response.detail;
       this.Loading = false;
       this.requestError = true;
       this.aplyForm.enable();
     }
 
-    setTimeout(() => {
-      this.requestError = false;
-    }, 5000);
+    this.resetAlerts()
     
   }
 
@@ -66,4 +72,14 @@ export class LoginComponent {
     }
     
   }
+
+  resetAlerts() {
+
+    setTimeout(() => {
+      this.requestError = false;
+      this.messageError = '';
+    }, 4000);
+  }
+
 }
+ 

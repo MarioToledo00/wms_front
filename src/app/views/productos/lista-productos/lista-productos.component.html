@@ -1,1 +1,107 @@
-<p>lista-productos works!</p>
+<view-content>
+
+    <header-content>
+        <div>
+            <h1>Lista de Productos</h1>
+        </div>
+        <div >
+            <form  cForm [formGroup]="aplyForm" 
+                [validated]="customStylesValidated"
+                cForm
+                class="row g-3 needs-validation">
+
+                <c-input-group class="mb-4" >
+                    <span cInputGroupText>
+                        <!-- <svg cIcon name="cilSearch"></svg> -->
+                    </span>
+                    <input  autoComplete="filter" cFormControl  formControlName="filter"  placeholder="Buscar..." required="" (keyup)="buscar()" />
+                </c-input-group>
+
+                <c-input-group class="mb-4">
+                    <select formControlName="brand"  aria-label="Default select example"  (change)="onSelectBrand($event)"  cSelect > 
+                    <option value="" disabled selected>Marca...</option>
+                    <option value="all" >Todas</option>
+                    <option *ngFor="let brand of brands" [value]="brand.name" [style.cursor]="'pointer'">
+                        {{ brand.name }}
+                    </option>
+                    </select>
+                
+                </c-input-group>
+
+                <c-input-group class="mb-4">
+                    <select formControlName="category"  aria-label="Default select example" (change)="onSelectCategory($event)"   cSelect > 
+                    <option value="" disabled selected>Categoria...</option>
+                    <option value="all">Todas</option>
+                    <option *ngFor="let category of categories" [value]="category.name" [style.cursor]="'pointer'">
+                        {{ category.name }}
+                    </option>
+                    </select>
+                
+                </c-input-group>
+              
+            </form>
+        </div>
+    </header-content>
+
+    <body-content>
+
+        <div class="table-overflow-x">
+            <table striped="true" cTable>
+            <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Sku</th>
+                <!-- <th scope="col">Código de barra</th> -->
+                <th scope="col">Min</th>
+                <th scope="col">Max</th>
+                <th scope="col">Unidad</th>
+                <th scope="col">Categoría</th>
+                <th scope="col">Marca</th>
+                <th scope="col">Estatus</th>
+                <th scope="col">Descripción</th>
+            </tr>
+            </thead>
+            <tbody>
+                @for (product of products; track product.id) {
+                    <tr>
+
+                        <td>{{product.name}}</td>
+                        <td>{{product.sku}}</td>
+                        <!-- <td>{{product.barcode}}</td> -->
+                        <td>{{product.stock_min}}</td>
+                        <td>{{product.stock_max}}</td>
+                        <td>{{product.unit}}</td>
+                        <td>{{product.category__name}}</td>
+                        <td>{{product.brand__name}}</td>
+                        <td>
+                            @if(product.active){
+                                <c-badge color="success">Activo</c-badge>
+                            }@else{
+                                <c-badge color="danger">Inactivo</c-badge>
+                            }
+                            
+                           </td>
+                        <td>{{product.description}}</td>
+                    </tr>
+                }   
+            </tbody>
+            </table>
+            @if(Loading){
+                
+                <c-spinner style="align-self: center;" color="primary"></c-spinner>
+
+            
+            }
+
+            @if(!Loading && !products.length){
+            
+            <h3 style="align-self: center;">No hay datos para mostrar</h3>
+            
+            }
+        </div>
+
+
+    </body-content>
+
+
+</view-content>

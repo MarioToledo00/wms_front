@@ -22,7 +22,7 @@ export class EmpresasService {
       const data = await fetch(`${this.API_URL}/empresas`,{
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${this.AuthService.getToken()}`,
+                'Authorization': `Bearer ${this.AuthService.getToken().access}`,
                 'Content-Type': 'application/json'
             }
         })
@@ -34,7 +34,7 @@ export class EmpresasService {
       const data = await fetch(`${this.API_URL}/paises`,{
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${this.AuthService.getToken()}`,
+                'Authorization': `Bearer ${this.AuthService.getToken().access}`,
                 'Content-Type': 'application/json'
             }
         })
@@ -45,7 +45,7 @@ export class EmpresasService {
       const data = await fetch(`${this.API_URL}/estados`,{
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${this.AuthService.getToken()}`,
+                'Authorization': `Bearer ${this.AuthService.getToken().access}`,
                 'Content-Type': 'application/json'
             }
         })
@@ -55,7 +55,7 @@ export class EmpresasService {
       const data = await fetch(`${this.API_URL}/municipios`,{
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${this.AuthService.getToken()}`,
+                'Authorization': `Bearer ${this.AuthService.getToken().access}`,
                 'Content-Type': 'application/json'
             }
         })
@@ -65,7 +65,7 @@ export class EmpresasService {
       const data = await fetch(`${this.API_URL}/ciudades`,{
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${this.AuthService.getToken()}`,
+                'Authorization': `Bearer ${this.AuthService.getToken().access}`,
                 'Content-Type': 'application/json'
             }
         })
@@ -77,7 +77,7 @@ export class EmpresasService {
       const data = await fetch(`${this.API_URL}/regimenes`,{
           method: 'GET',
           headers: {
-              'Authorization': `Bearer ${this.AuthService.getToken()}`,
+              'Authorization': `Bearer ${this.AuthService.getToken().access}`,
               'Content-Type': 'application/json'
           }
         })
@@ -98,7 +98,7 @@ export class EmpresasService {
       const response = await fetch(`${this.API_URL}/${url}`,{
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.AuthService.getToken()}`,
+          'Authorization': `Bearer ${this.AuthService.getToken().access}`,
           'Content-Type': 'application/json',  // Asegúrate de establecer el encabezado
         },
         body: data,
@@ -112,7 +112,7 @@ export class EmpresasService {
       const response = await fetch(`${this.API_URL}/empresas/delete`,{
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.AuthService.getToken()}`,
+          'Authorization': `Bearer ${this.AuthService.getToken().access}`,
           'Content-Type': 'application/json',  // Asegúrate de establecer el encabezado
         },
         body: JSON.stringify({id}),

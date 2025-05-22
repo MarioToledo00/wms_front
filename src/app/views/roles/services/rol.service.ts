@@ -16,7 +16,7 @@ export class RolService {
         const data = await fetch(`${this.API_URL}/roles`,{
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${this.AuthService.getToken()}`,
+                'Authorization': `Bearer ${this.AuthService.getToken().access}`,
                 'Content-Type': 'application/json'
             }
         })
@@ -32,7 +32,7 @@ export class RolService {
         const response = await fetch(`${this.API_URL}/${url}`,{
             method: 'POST',
             headers: {
-            'Authorization': `Bearer ${this.AuthService.getToken()}`,
+            'Authorization': `Bearer ${this.AuthService.getToken().access}`,
             'Content-Type': 'application/json',  // Asegúrate de establecer el encabezado
             },
             body: JSON.stringify({nombre,created_by,rol_id}),
@@ -46,7 +46,7 @@ export class RolService {
         const response = await fetch(`${this.API_URL}/roles/delete`,{
             method: 'POST',
             headers: {
-              'Authorization': `Bearer ${this.AuthService.getToken()}`,
+              'Authorization': `Bearer ${this.AuthService.getToken().access}`,
               'Content-Type': 'application/json',  // Asegúrate de establecer el encabezado
             },
             body: JSON.stringify({id}),

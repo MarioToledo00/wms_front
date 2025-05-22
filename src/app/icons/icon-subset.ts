@@ -97,7 +97,8 @@ import {
   cilPhone,
   cilBuilding,
   cilLockUnlocked,
-  cilApplications
+  cilApplications,
+  cilSearch
 
 } from '@coreui/icons';
 
@@ -205,7 +206,8 @@ export const iconSubset = {
   logo,
   cilLockUnlocked,
   signet,
-  cilApplications
+  cilApplications,
+  cilSearch
 };
 
 export enum IconSubset {
@@ -248,7 +250,7 @@ export enum IconSubset {
   cilCloudDownload = 'cilCloudDownload',
   cilCode = 'cilCode',
   cilCommentSquare = 'cilCommentSquare',
-  cilContrast = 'cilContrastś',
+  cilContrast = 'cilContrast',
   cilCreditCard = 'cilCreditCard',
   cilCursor = 'cilCursor',
   cilDescription = 'cilDescription',
@@ -309,6 +311,7 @@ export enum IconSubset {
   signet = 'signet',
   cilBuilding = 'cilBuilding',
   cilLockUnlocked='cilLockUnlocked',
-  cilApplications='cilApplications'
+  cilApplications='cilApplications',
+  cilSearch = 'cilSearch'
 }
 
