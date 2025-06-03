@@ -17,6 +17,7 @@ import { Producto } from '../interface/producto';
 import { Brand } from '../interface/brands';
 import { Category } from '../interface/categories';
 import { ProductsService } from '../services/products.service';
+import { Inventario } from '../interface/inventario';
 
 @Component({
   selector: 'app-lista-productos',
@@ -48,10 +49,10 @@ export class ListaProductosComponent {
         });
   Loading = true;
 
-  productsStore: Producto[] = [];
+  productsStore: Inventario[] = [];
   brandsStore: Brand[] = [];
   categoriesStore: Category[] = [];
-  products: Producto[] = [];
+  products: Inventario[] = [];
   brands: Brand[] = [];
   categories: Category[] = [];
 
@@ -65,22 +66,29 @@ export class ListaProductosComponent {
 
 
   buscar(){
-    const filtro = (this.aplyForm.get('filter')?.value)?.toLowerCase();
-    if (!filtro) {
-
-      this.products = this.productsStore;
-
+    const filtro = (this.aplyForm.get('filter')?.value)?.toLowerCase()??'';
+    const brand = this.aplyForm.get('brand')?.value?.toLowerCase()??'';
+    const category = this.aplyForm.get('category')?.value?.toLowerCase()??'';
+    this.products = this.productsStore;
+    if (!filtro&&brand===''&&category==='') {
+      return;
+      
     }else{
 
-      this.products = this.productsStore.filter((producto) => {
-        return (producto.name.toLowerCase().includes(filtro) ||
-          producto.description.toLowerCase().includes(filtro) ||
-          producto.sku.toLowerCase().includes(filtro) ||
-          producto.category__name.toLowerCase().includes(filtro) ||
-          producto.brand__name.toLowerCase().includes(filtro) )
+      this.products = this.products.filter((producto) => {
+        return brand? (producto.brand_name.toLowerCase().includes(brand)):(producto)
       });
 
+      this.products = this.products.filter((producto) => {
+        return category? (producto.category_name.toLowerCase().includes(category) ): (producto)
+      });
 
+      this.products = this.products.filter((producto) => {
+        return filtro? (producto.product_name.toLowerCase().includes(filtro) ||
+          producto.warehouse_name.toLowerCase().includes(filtro) ||
+          producto.location.toLowerCase().includes(filtro) ): (producto)
+      });
+    
     }
   }
 
@@ -102,28 +110,35 @@ export class ListaProductosComponent {
   onSelectBrand(event: Event): void {
 
       const selectedValue = (event.target as HTMLSelectElement).value.toString();
-
-      if(selectedValue!=='all'){
-        this.products = this.products.filter((producto) => {
-          return (producto.brand__name == selectedValue)
-        });
-      }else{
-        this.products = this.products;
-      }
+      this.aplyForm.patchValue({
+        brand: selectedValue
+      })
+      this.buscar();
+      // if(selectedValue!=='all'){
+      //   this.products = this.products.filter((producto) => {
+      //     return (producto.brand__name == selectedValue)
+      //   });
+      // }else{
+      //   this.products = this.products;
+      // }
 
   }
 
   onSelectCategory(event: Event): void {
 
       const selectedValue = (event.target as HTMLSelectElement).value.toString();
+      this.aplyForm.patchValue({
+        category: selectedValue
+      })
 
-      if(selectedValue!=='all'){
-        this.products = this.products.filter((producto) => {
-          return (producto.category__name == selectedValue)
-        });
-      }else{
-        this.products = this.products;
-      }
+      this.buscar();
+      // if(selectedValue!=='all'){
+      //   this.products = this.products.filter((producto) => {
+      //     return (producto.category__name == selectedValue)
+      //   });
+      // }else{
+      //   this.products = this.products;
+      // }
       
   }
 

@@ -20,7 +20,7 @@
                 <c-input-group class="mb-4">
                     <select formControlName="brand"  aria-label="Default select example"  (change)="onSelectBrand($event)"  cSelect > 
                     <option value="" disabled selected>Marca...</option>
-                    <option value="all" >Todas</option>
+                    <option value="" >Todas</option>
                     <option *ngFor="let brand of brands" [value]="brand.name" [style.cursor]="'pointer'">
                         {{ brand.name }}
                     </option>
@@ -31,7 +31,7 @@
                 <c-input-group class="mb-4">
                     <select formControlName="category"  aria-label="Default select example" (change)="onSelectCategory($event)"   cSelect > 
                     <option value="" disabled selected>Categoria...</option>
-                    <option value="all">Todas</option>
+                    <option value="">Todas</option>
                     <option *ngFor="let category of categories" [value]="category.name" [style.cursor]="'pointer'">
                         {{ category.name }}
                     </option>
@@ -50,38 +50,31 @@
             <thead>
             <tr>
                 <th scope="col">Nombre</th>
-                <th scope="col">Sku</th>
-                <!-- <th scope="col">Código de barra</th> -->
-                <th scope="col">Min</th>
-                <th scope="col">Max</th>
-                <th scope="col">Unidad</th>
-                <th scope="col">Categoría</th>
+                <th scope="col">Ubicación</th>
+                <th scope="col">Stock</th>
                 <th scope="col">Marca</th>
+                <th scope="col">Categoría</th>
+                <th scope="col">Almacen</th>
                 <th scope="col">Estatus</th>
-                <th scope="col">Descripción</th>
             </tr>
             </thead>
             <tbody>
-                @for (product of products; track product.id) {
+                @for (product of products; track product.product__id) {
                     <tr>
 
-                        <td>{{product.name}}</td>
-                        <td>{{product.sku}}</td>
-                        <!-- <td>{{product.barcode}}</td> -->
-                        <td>{{product.stock_min}}</td>
-                        <td>{{product.stock_max}}</td>
-                        <td>{{product.unit}}</td>
-                        <td>{{product.category__name}}</td>
-                        <td>{{product.brand__name}}</td>
+                        <td>{{product.product_name}}</td>
+                        <td>{{product.location}}</td>
+                        <td>{{product.stock}}</td>
+                        <td>{{product.brand_name}}</td>
+                        <td>{{product.category_name}}</td>
+                        <td>{{product.warehouse_name}}</td>
                         <td>
                             @if(product.active){
                                 <c-badge color="success">Activo</c-badge>
                             }@else{
                                 <c-badge color="danger">Inactivo</c-badge>
                             }
-                            
-                           </td>
-                        <td>{{product.description}}</td>
+                        </td>
                     </tr>
                 }   
             </tbody>
