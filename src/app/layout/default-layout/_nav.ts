@@ -16,6 +16,11 @@ export const navItems: INavData[] = [
     iconComponent: { name: 'cilApplications' }
   },
   {
+    name: 'Conteo de Inventario',
+    url: '/inventory/warehouse_count',
+    iconComponent: { name: 'cil-home' }
+  },
+  {
     title: true,
     name: 'Usuarios'
   },

@@ -71,8 +71,12 @@ export const routes: Routes = [
       {
         path: 'pages',
         loadChildren: () => import('./views/pages/routes').then((m) => m.routes)
+      },
+      {
+        path: 'inventory',
+        loadChildren: () => import('./views/inventory/routes').then((m) => m.routes)
       }
-    ], 
+    ],
     canActivate: [AuthGuard]
   },
   {

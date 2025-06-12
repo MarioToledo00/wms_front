@@ -1,0 +1,220 @@
+<view-content>
+
+    <header-content>
+        <div>
+            <h1>Conteo de Inventario</h1>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-primary" (click)="openCreateInventoryCount()">Crear Conteo</button>
+        </div>
+    </header-content>
+
+    <body-content>
+
+        @if(!count_closed.length && !count_open.length) {
+            <div class="empty-state">
+                <div class="empty-data-count"></div>
+                <p>No hay conteos de inventario disponibles.</p>
+            </div>
+        } @else {
+
+            <warehouses-open-counts>
+                <tittle-count>
+                    <hr>
+                    <span>Conteos Abiertos {{count_open.length}}</span>
+                </tittle-count>
+
+                <warehouse-list>
+                    @for(warehouse of count_open; track $index) {
+                        <warehouse-item (click)="openCount(warehouse.id)" >
+                            <div>
+                                <div class="icon" >   
+                                    <span cInputGroupText class="primary" [cTooltip]="warehouse.info" cTooltipPlacement="top">
+                                        <svg cIcon name="cil-home"></svg>
+                                    </span>
+                                    <div>
+
+                                        @if(warehouse.type=='Completo'){
+                                            <p class="full">{{warehouse.type}}</p>
+                                        }@else if(warehouse.type=='Parcial'){
+                                            <p class="partial">{{warehouse.type}}</p>
+                                        }@else if(warehouse.type=='Seccion'){
+                                            <p class="section">{{warehouse.type}}</p>
+                                        }@else {
+                                            <p class="other">{{warehouse.type}}</p>
+                                        }
+                                    </div>
+                                </div>
+                                <div>
+
+                                    <div class="warehouse-info">
+                                        <h5>{{warehouse.name}}</h5>
+                                        <p>{{warehouse.address}}</p>
+                                         @if(warehouse.progress<50){
+                                        <p class="danger">{{warehouse.progress}} %</p>
+                                    }@else if(warehouse.progress<80){
+                                        <p class="warning">{{warehouse.progress}} %</p>
+                                    }@else {
+                                        <p class="success">{{warehouse.progress}} %</p>
+                                    }
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="warehouse-details">
+                               
+                               
+                                <!-- <p><b>{{warehouse.countType=='one'?'1':'2'}}</b></p>
+                                <p>Tipo: {{warehouse.type}}</p> -->
+                            </div>
+
+
+                        </warehouse-item>
+                    }
+                </warehouse-list>
+
+            </warehouses-open-counts>
+
+            <warehouses-closed-counts>
+                <tittle-count>
+                    <hr>
+                    <span>Conteos Cerrados {{count_closed.length}}</span>
+                </tittle-count>
+
+                <warehouse-list>
+                    @for(warehouse of count_closed; track $index) {
+                        <warehouse-item (click)="openCount(warehouse.id)" >
+                            <div>
+                                <div class="icon" >   
+                                    <span cInputGroupText class="primary" [cTooltip]="warehouse.info" cTooltipPlacement="top">
+                                        <svg cIcon name="cil-home"></svg>
+                                    </span>
+                                    <div>
+
+                                        @if(warehouse.type=='Completo'){
+                                            <p class="full">{{warehouse.type}}</p>
+                                        }@else if(warehouse.type=='Parcial'){
+                                            <p class="partial">{{warehouse.type}}</p>
+                                        }@else if(warehouse.type=='Seccion'){
+                                            <p class="section">{{warehouse.type}}</p>
+                                        }@else {
+                                            <p class="other">{{warehouse.type}}</p>
+                                        }
+                                    </div>
+                                </div>
+                                <div>
+
+                                    <div class="warehouse-info">
+                                        <h5>{{warehouse.name}}</h5>
+                                        <p>{{warehouse.address}}</p>
+                                        @if(warehouse.status=='Completed'){
+                                            <p class="primarystatus">Completado</p>
+                                        }@else{
+                                            <p class="warningstatus">Cancelado</p>
+                                    }
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="warehouse-details">
+                               
+                               
+                                <!-- <p><b>{{warehouse.countType=='one'?'1':'2'}}</b></p>
+                                <p>Tipo: {{warehouse.type}}</p> -->
+                            </div>
+
+
+                        </warehouse-item>
+                    }
+                </warehouse-list>
+
+            </warehouses-closed-counts>
+
+        }
+
+
+        <c-modal [visible]="creating_count" alignment="center"  backdrop="static" >
+            <c-modal-header><b>Configuración de conteo</b></c-modal-header>
+            <c-modal-body>
+                <form cForm [formGroup]="createCountForm" 
+                      #customStylesForm="ngForm"
+                      (ngSubmit)="createCount()"
+                      [validated]="customStylesValidated"
+                      cForm
+                      class="row g-3 needs-validation">
+                    <p class="text-body-secondary">Configura los detalles del conteo de inventario.</p>
+
+                    <label for="">Seleccione cantidad de conteo</label>
+                    
+                    <div style="margin-left: 10px;">
+                        
+                            <c-form-check>
+                                <input cFormCheckInput formControlName="countType" type="radio" value="1" name="flexRadioDefault" checked />
+                                <label cFormCheckLabel>1 Conteo</label>
+                            </c-form-check>
+                            <c-form-check>
+                                <input cFormCheckInput formControlName="countType" type="radio" value="2" name="flexRadioDefault" />
+                                <label cFormCheckLabel>2 Conteos</label>
+                            </c-form-check>
+
+                    </div>
+
+                    <c-input-group class="mb-3">
+                        <span cInputGroupText>
+                            <svg cIcon name=""></svg>
+                        </span>
+                        <select formControlName="warehouse"  aria-label="Default select example"  cSelect [class.border-danger]="invalidwarehouse"> 
+                            <option value="" disabled selected>Seleccione almacen...</option>
+                            <option *ngFor="let warehouse of WarehousesEnables" [value]="warehouse.id" [style.cursor]="'pointer'">
+                                {{ warehouse.warehouses__name+' '+ warehouse.address }}
+                            </option>
+                        </select>
+                    </c-input-group>
+
+                    <c-input-group class="mb-3">
+                        <span cInputGroupText>
+                            <svg cIcon name=""></svg>
+                        </span>
+                        <select formControlName="type"  aria-label="Default select example"  cSelect [class.border-danger]="invalidwarehouse"> 
+                            <option value="" disabled selected>Tipo de conteo...</option>
+                            <option value="Completo">Conteo Completo</option>
+                            <option value="Parcial">Conteo Parcial</option>
+                            <option value="Seccion">Sección</option>
+                        </select>
+                    </c-input-group>
+
+                   
+                </form> 
+                
+            </c-modal-body>
+            <c-modal-footer>
+                <div></div>
+                <div class="d-flex" style="gap: 10px;">
+                    <button 
+                    color="secondary"
+                    cButton
+                    variant="outline" class="btn btn-secondary" (click)="cancelCreateCount()" >Cancelar</button>
+                    <button
+                    color="primary"
+                    cButton class="btn btn-primary" (click)="createCount()">Crear</button>
+                </div>
+            </c-modal-footer>
+        </c-modal>
+
+
+    </body-content>
+
+
+</view-content>
+
+<c-container class="floating-alert-container">
+    <c-alert [(visible)]="inValidRequest" dismissible color="danger" fade class="alert">
+        <strong>Error: </strong> {{RequestMessage}}.
+    </c-alert>
+    <c-alert [(visible)]="successRequest" dismissible color="success" fade class="alert">
+        <strong>Éxito</strong> {{RequestMessage}}.
+    </c-alert>
+    <c-alert [(visible)]="warningRequest" dismissible color="warning" fade class="alert">
+        <strong>Atención</strong> {{RequestMessage}}.
+    </c-alert>
+</c-container>
